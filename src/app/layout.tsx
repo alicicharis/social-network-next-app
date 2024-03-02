@@ -1,12 +1,17 @@
 import "@/styles/globals.css";
 
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 
-const inter = Inter({
+import Nav from "./_components/Nav";
+import Header from "./_components/Header";
+
+const montserrat = Montserrat({
+  weight: "500",
   subsets: ["latin"],
-  variable: "--font-sans",
+  display: "swap",
+  variable: "--font-roboto-mono",
 });
 
 export const metadata = {
@@ -22,7 +27,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`${montserrat.variable} flex-col font-mono`}>
+        <div className="flex flex-row">
+          <Nav />
+          <Header />
+        </div>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
