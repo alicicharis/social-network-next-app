@@ -47,6 +47,7 @@ const posts: IPost[] = [
 ];
 
 const Home = () => {
+  console.log("Testing commit...");
   return (
     <div className="flex min-h-screen w-full flex-col bg-slate-200">
       <Navigation />
