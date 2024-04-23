@@ -16,7 +16,13 @@ const posts: IPost[] = [
     comments: 15,
     likes: 150,
     shares: 12,
-    images: ["/images/image-test.webp", "/images/image-test.webp"],
+    images: [
+      "/images/image-test.webp",
+      "/images/image-test.webp",
+      "/images/image-test.webp",
+      "/images/image-test.webp",
+      "/images/image-test.webp",
+    ],
   },
   {
     id: 1,
@@ -51,9 +57,9 @@ const Home = () => {
             <AddPost />
             <Posts posts={posts} />
           </div>
-          <div className="grid lg:col-span-3">
+          {/* <div className="grid lg:col-span-3">
             <GridPlayground />
-          </div>
+          </div> */}
         </main>
       </div>
     </div>
