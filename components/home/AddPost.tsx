@@ -50,7 +50,7 @@ const AddPost = () => {
       <Separator />
       <div className="flex gap-2 sm:gap-3">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src="/images/user-image.jpg" alt="@haris" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <Form {...form}>

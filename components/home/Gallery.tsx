@@ -9,19 +9,12 @@ const Gallery = ({ images }: { images: string[] }) => {
 
         return (
           <div key={i} className="h-fit cursor-pointer">
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                height: "auto",
-              }}
-            >
+            <div className="w-full h-[200px] relative">
               <Image
                 src={image}
                 alt="gallery image"
-                width={500}
-                height={500}
-                className="w-full h-auto rounded-lg"
+                fill
+                className="object-cover rounded-lg"
               />
               {images.length > 4 && i === 3 && (
                 <div className="absolute inset-0 bg-black rounded-lg bg-opacity-50 transition-opacity duration-500 ease-in-out flex items-center justify-center">

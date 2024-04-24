@@ -30,10 +30,7 @@ const Posts = ({ posts }: { posts: IPost[] }) => {
           <div className="flex justify-between items-center">
             <div className="flex flex-row items-center space-x-2">
               <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
+                <AvatarImage src="/images/user-image.jpg" alt="@haris" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div>
@@ -58,56 +55,48 @@ const Posts = ({ posts }: { posts: IPost[] }) => {
             {post.images &&
               post?.images.length === 1 &&
               post?.images.map((image, i) => (
-                <div
+                <Image
                   key={i}
-                  className="flex justify-center"
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "auto",
-                  }}
-                >
-                  <Image
-                    src={image}
-                    alt="user-image"
-                    layout="responsive"
-                    width={500}
-                    height={500}
-                  />
-                </div>
+                  src={image}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  alt="photo"
+                  className="w-full h-auto rounded-lg"
+                />
               ))}
             {post.images && post?.images.length > 1 && (
               <Gallery images={post.images} />
             )}
           </div>
           <Separator />
-          <div className="flex w-full justify-around sm:justify-between items-center">
-            <div className="flex space-x-1 items-center cursor-pointer group">
+          <div className="flex w-full justify-around sm:justify-between items-cente !mt-0">
+            <div className="flex space-x-1 items-center cursor-pointer group py-4">
               <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
-                25 Comments
+                {post.comments} Comments
               </span>
               <MessageSquare className="h-5 text-gray-400 group-hover:text-black" />
             </div>
-            <div className="flex space-x-1 items-center cursor-pointer group">
+            <div className="flex space-x-1 items-center cursor-pointer group py-4">
               <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
-                195 Likes
+                {post.likes} Likes
               </span>
               <Heart className="h-5 text-gray-400 group-hover:text-black" />
             </div>
-            <div className="flex space-x-1 items-center cursor-pointer group">
+            <div className="flex space-x-1 items-center cursor-pointer group py-4">
               <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
-                10 Shares
+                {post.shares} Shares
               </span>
               <Share2 className="h-5 text-gray-400 group-hover:text-black" />
             </div>
-            <div className="flex space-x-1 items-center cursor-pointer group">
+            <div className="flex space-x-1 items-center cursor-pointer group py-4">
               <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
-                15 Bookmarks
+                {post.bookmarks} Bookmarks
               </span>
               <Bookmark className="h-5 text-gray-400 group-hover:text-black" />
             </div>
           </div>
-          <Separator />
+          <Separator className="!mt-0" />
           <CommentForm />
         </div>
       ))}
