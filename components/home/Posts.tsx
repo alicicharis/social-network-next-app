@@ -72,25 +72,25 @@ const Posts = ({ posts }: { posts: IPost[] }) => {
           <Separator />
           <div className="flex w-full justify-around sm:justify-between items-cente !mt-0">
             <div className="flex space-x-1 items-center cursor-pointer group py-4">
-              <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
+              <span className="text-sm hidden md:inline-block text-gray-400 group-hover:text-black">
                 {post.comments} Comments
               </span>
               <MessageSquare className="h-5 text-gray-400 group-hover:text-black" />
             </div>
             <div className="flex space-x-1 items-center cursor-pointer group py-4">
-              <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
+              <span className="text-sm hidden md:inline-block text-gray-400 group-hover:text-black">
                 {post.likes} Likes
               </span>
               <Heart className="h-5 text-gray-400 group-hover:text-black" />
             </div>
             <div className="flex space-x-1 items-center cursor-pointer group py-4">
-              <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
+              <span className="text-sm hidden md:inline-block text-gray-400 group-hover:text-black">
                 {post.shares} Shares
               </span>
               <Share2 className="h-5 text-gray-400 group-hover:text-black" />
             </div>
             <div className="flex space-x-1 items-center cursor-pointer group py-4">
-              <span className="text-sm hidden sm:inline-block text-gray-400 group-hover:text-black">
+              <span className="text-sm hidden md:inline-block text-gray-400 group-hover:text-black">
                 {post.bookmarks} Bookmarks
               </span>
               <Bookmark className="h-5 text-gray-400 group-hover:text-black" />

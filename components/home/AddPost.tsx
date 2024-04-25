@@ -46,7 +46,7 @@ const AddPost = () => {
 
   return (
     <div className="flex p-4 flex-col bg-white rounded-lg shadow-sm space-y-2">
-      <p className="font-normal">Post something</p>
+      <p className="font-normal text-slate-500 text-lg">Post something</p>
       <Separator />
       <div className="flex gap-2 sm:gap-3">
         <Avatar>

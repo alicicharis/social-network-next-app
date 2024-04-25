@@ -10,7 +10,7 @@ import {
 
 const Navigation = () => {
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 xl:w-[150px] flex-col border-r bg-background sm:flex">
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 xl:w-[200px] flex-col border-r bg-background sm:flex">
       <nav className="h-full flex-col space-y-5 pt-5">
         <div className="flex justify-center items-center pb-3">
           <Link

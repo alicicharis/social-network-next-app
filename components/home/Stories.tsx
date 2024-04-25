@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import AddStory from "./AddStory";
 
 export interface IStory {
   id: number;
@@ -23,10 +24,10 @@ const Stories = ({ stories }: { stories: IStory[] }) => {
         className="w-full"
         opts={{
           align: "start",
-          loop: true,
         }}
       >
         <CarouselContent className="-ml-1">
+          <AddStory />
           {stories.map((story) => (
             <CarouselItem
               key={story.id}
@@ -48,7 +49,7 @@ const Stories = ({ stories }: { stories: IStory[] }) => {
                       src={story.userImage}
                       fill
                       alt="user photo"
-                      className="rounded-full object-cover"
+                      className="rounded-full object-contain"
                     />
                   </div>
                 </div>
