@@ -80,7 +80,7 @@ const ChatList = () => {
                 src={friend.userImage}
                 fill
                 alt="user photo"
-                className="rounded-full object-contain border-2 border-blue-300"
+                className="rounded-full object-contain border-2 border-blue-500"
               />
             </div>
             <p className="text-sm">{friend.name}</p>
