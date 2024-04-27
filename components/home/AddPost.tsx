@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useDropzone } from "react-dropzone";
 import { Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -10,39 +11,63 @@ import { Form, FormField, FormLabel, FormItem, FormControl } from "../ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
+import PreviewGallery from "./PreviewGallery";
 
 const postSchema = z.object({
   text: z.string().min(1),
-  image: z.any(),
 });
 
 type PostSchema = z.infer<typeof postSchema>;
 
-const AddPost = () => {
-  const [file, setFile] = useState<any>();
-  const [selectedImage, setSelectedImage] = useState<any>("");
+export interface IImage {
+  id: number;
+  file: string;
+  preview: string;
+}
 
-  const getFile = (event: any) => {
-    setFile(URL.createObjectURL(event.target.files[0]));
-  };
+const AddPost = () => {
+  const [images, setImages] = useState<IImage[]>([]);
+
+  const onDrop = useCallback((acceptedFiles: any) => {
+    console.log("Accepted files: ", acceptedFiles);
+
+    const newImages = acceptedFiles.map((file: any, i: number) =>
+      Object.assign(file, {
+        id: i,
+        preview: URL.createObjectURL(file),
+      })
+    );
+    setImages((prevImages) => [...prevImages, ...newImages]);
+  }, []);
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const form = useForm<PostSchema>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       text: "",
-      image: "",
     },
   });
 
   const onSubmitHandler = (data: PostSchema) => {
     console.log("Data: ", data);
-
-    // const objectUrl = window.URL.createObjectURL(data.image);
-    // setSelectedImage(objectUrl);
   };
 
-  // useEffect()
-  // return () => URL.revokeObjectURL(objectUrl);
+  const removeImageHandler = (imageId: number) => {
+    setImages((prevImages) =>
+      prevImages.filter((image) => {
+        if (image.id === imageId) URL.revokeObjectURL(image.preview);
+
+        return image.id !== imageId;
+      })
+    );
+  };
+
+  console.log("THESE ARE THE IMGEAS LENGTH: ", images.length);
+
+  useEffect(() => {
+    return () =>
+      images.forEach((image: any) => URL.revokeObjectURL(image.preview));
+  }, []);
 
   return (
     <div className="flex p-4 flex-col bg-white rounded-lg shadow-sm space-y-2">
@@ -73,57 +98,47 @@ const AddPost = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="file-input">
-                    <ImageIcon className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      id="file-input"
-                      type="file"
-                      className="hidden"
-                      onChange={getFile}
-                      // {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            {/* <FormLabel htmlFor="file-input">
-                <Image className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
-              </FormLabel>
-
-              <input id="file-input" type="file" className="hidden" /> */}
-            {/* <Image className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" /> */}
-            {/* <Button type="submit">Submit</Button> */}
+            <div {...getRootProps()}>
+              <label htmlFor="images">
+                <ImageIcon className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
+              </label>
+              <Input
+                id="file-input"
+                type="file"
+                className="hidden"
+                {...getInputProps}
+              />
+            </div>
           </form>
         </Form>
       </div>
-      <div className="flex justify-center items-center">
-        <div
-          className="flex justify-center relative group overflow-hidden cursor-pointer"
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "auto",
-          }}
-        >
-          <Image
-            src="/images/image-test.webp"
-            alt="user-image"
-            width={900}
-            height={900}
-            className="w-full h-auto rounded-lg"
-          />
-          <div className="absolute inset-0 bg-black rounded-lg bg-opacity-100 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-70 flex items-center justify-center">
-            <p className="text-white text-lg">Click to remove</p>
+      {images.length === 1 && (
+        <div className="flex justify-center items-center">
+          <div
+            className="flex justify-center relative group overflow-hidden cursor-pointer"
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "auto",
+            }}
+          >
+            <Image
+              src={images[0].preview}
+              alt="user-image"
+              width={900}
+              height={900}
+              className="w-full h-auto rounded-lg"
+            />
+            <div
+              onClick={() => removeImageHandler(0)}
+              className="absolute inset-0 bg-black rounded-lg bg-opacity-100 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-70 flex items-center justify-center"
+            >
+              <p className="text-white text-lg">Click to remove</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      {images.length > 1 && <PreviewGallery images={images} />}
     </div>
   );
 };
