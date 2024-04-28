@@ -29,8 +29,6 @@ const AddPost = () => {
   const [images, setImages] = useState<IImage[]>([]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
-    console.log("Accepted files: ", acceptedFiles);
-
     const newImages = acceptedFiles.map((file: any, i: number) =>
       Object.assign(file, {
         id: i,
@@ -61,8 +59,6 @@ const AddPost = () => {
       })
     );
   };
-
-  console.log("THESE ARE THE IMGEAS LENGTH: ", images.length);
 
   useEffect(() => {
     return () =>
