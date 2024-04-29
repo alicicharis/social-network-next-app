@@ -21,7 +21,8 @@ import { sql } from "drizzle-orm";
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
   name: text("name"),
-  email: text("email").notNull(),
+  password: text("password").notNull(),
+  email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
@@ -71,3 +72,33 @@ export const verificationTokens = pgTable(
 /**
  * APP SPECIFIC TABLES
  */
+
+export const todos = pgTable("todo", {
+  id: uuid("id")
+    .notNull()
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  text: varchar("text").notNull(),
+  isCompleted: boolean("isCompleted").notNull().default(false),
+  createdAt: time("createdAt")
+    .notNull()
+    .default(sql`now()`),
+});
+
+export const subscriptions = pgTable("subscriptions", {
+  userId: text("userId")
+    .notNull()
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  stripeSubscriptionId: text("stripeSubscriptionId").notNull(),
+  stripeCustomerId: text("stripeCustomerId").notNull(),
+  stripePriceId: text("stripePriceId").notNull(),
+  stripeCurrentPeriodEnd: timestamp("stripeCurrentPeriodEnd", {
+    mode: "string",
+  }).notNull(),
+});
+
+export type Todo = typeof todos.$inferSelect;

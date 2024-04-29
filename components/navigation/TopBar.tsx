@@ -1,3 +1,6 @@
+"use client";
+import { signOut } from "next-auth/react";
+
 import { Search } from "lucide-react";
 
 import { Button } from "../ui/button";
@@ -44,7 +47,7 @@ const TopBar = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
