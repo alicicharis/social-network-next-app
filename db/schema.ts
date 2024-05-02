@@ -88,6 +88,24 @@ export const todos = pgTable("todo", {
     .default(sql`now()`),
 });
 
+export const posts = pgTable("posts", {
+  id: uuid("id")
+    .notNull()
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  text: varchar("text").notNull(),
+  images: varchar("images"),
+  updatedAt: time("createdAt")
+    .notNull()
+    .default(sql`now()`),
+  createdAt: time("createdAt")
+    .notNull()
+    .default(sql`now()`),
+});
+
 export const subscriptions = pgTable("subscriptions", {
   userId: text("userId")
     .notNull()
@@ -102,3 +120,4 @@ export const subscriptions = pgTable("subscriptions", {
 });
 
 export type Todo = typeof todos.$inferSelect;
+export type Post = typeof posts.$inferSelect;

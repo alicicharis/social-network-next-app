@@ -12,6 +12,9 @@ export const env = createEnv({
     // STRIPE_WEBHOOK_SECRET: z.string().min(1),
     // PRICE_ID: z.string().min(1),
     HOSTNAME: z.string().min(1),
+    S3_BUCKET_ACCESS_KEY: z.string().min(1),
+    S3_BUCKET_SECRET_ACCESS_KEY: z.string().min(1),
+    S3_BUCKET_NAME: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_HOSTNAME: z.string().min(1),
@@ -33,5 +36,8 @@ export const env = createEnv({
     NEXT_PUBLIC_HOSTNAME: process.env.NEXT_PUBLIC_HOSTNAME,
     // NEXT_PUBLIC_PROJECT_PLANNER_ID: process.env.NEXT_PUBLIC_PROJECT_PLANNER_ID,
     // NEXT_PUBLIC_SKIP_EVENTS: process.env.NEXT_PUBLIC_SKIP_EVENTS,
+    S3_BUCKET_ACCESS_KEY: process.env.S3_BUCKET_ACCESS_KEY,
+    S3_BUCKET_SECRET_ACCESS_KEY: process.env.S3_BUCKET_SECRET_ACCESS_KEY,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
   },
 });

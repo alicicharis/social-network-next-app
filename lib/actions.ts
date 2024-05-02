@@ -1,10 +1,12 @@
 "use server";
 // import { revalidatePath } from "next/cache";
-import { signUpFormSchema } from "./zod-schema";
+import { signUpFormSchema, PostSchema } from "./zod-schema";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrpyt from "bcrypt";
+import { S3, PutObjectCommand } from "@aws-sdk/client-s3";
+import { env } from "@/env";
 
 type Error = {
   username?: string;
@@ -79,4 +81,50 @@ export const signUp = async (
   // revalidate path after adding data like todos...
   //   revalidatePath('/');
   return { message: "User registered!" };
+};
+
+export const formSubmitHandler = async (prevState: any, formData: any) => {
+  const file = formData.get("my-file");
+
+  const fileName = file?.name;
+  const fileType = file?.type;
+
+  const binaryFile = await file.arrayBuffer();
+  const fileBuffer = Buffer.from(binaryFile);
+
+  const s3Client = new S3({
+    region: "eu-west-1",
+    credentials: {
+      accessKeyId: env.S3_BUCKET_ACCESS_KEY,
+      secretAccessKey: env.S3_BUCKET_SECRET_ACCESS_KEY,
+    },
+  });
+
+  const params = {
+    Bucket: env.S3_BUCKET_NAME,
+    Key: fileName,
+    Body: fileBuffer,
+    ContentType: fileType,
+  };
+
+  try {
+    await s3Client.send(new PutObjectCommand(params));
+
+    return { status: "success" };
+  } catch (err) {
+    console.log("ERROR: ", err);
+    return { status: "failed" };
+  }
+};
+
+export interface IImage {
+  id: number;
+  file: string;
+  preview: string;
+}
+
+export const mutationFunction = (images: IImage[]): any => {
+  // console.log("DATA: ", data);
+
+  return true;
 };

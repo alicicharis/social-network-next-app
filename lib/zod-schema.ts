@@ -42,3 +42,10 @@ export const signUpFormSchema = z
   });
 
 export type SignUpFormSchema = z.infer<typeof signUpFormSchema>;
+
+export const postSchema = z.object({
+  text: z.string().min(1),
+  images: z.any().optional(),
+});
+
+export type PostSchema = z.infer<typeof postSchema>;

@@ -6,18 +6,16 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 
 import { Form, FormField, FormLabel, FormItem, FormControl } from "../ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import PreviewGallery from "./PreviewGallery";
-
-const postSchema = z.object({
-  text: z.string().min(1),
-});
-
-type PostSchema = z.infer<typeof postSchema>;
+import { mutationFunction } from "@/lib/actions";
+import { Button } from "../ui/button";
+import { PostSchema, postSchema } from "@/lib/zod-schema";
 
 export interface IImage {
   id: number;
@@ -28,8 +26,12 @@ export interface IImage {
 const AddPost = () => {
   const [images, setImages] = useState<IImage[]>([]);
 
+  const { mutate } = useMutation({
+    mutationFn: (images: IImage[]) => mutationFunction(images),
+  });
+
   const onDrop = useCallback((acceptedFiles: any) => {
-    const newImages = acceptedFiles.map((file: any, i: number) =>
+    const newImages: any = acceptedFiles.map((file: any, i: number) =>
       Object.assign(file, {
         id: i,
         preview: URL.createObjectURL(file),
@@ -48,6 +50,9 @@ const AddPost = () => {
 
   const onSubmitHandler = (data: PostSchema) => {
     console.log("Data: ", data);
+
+    console.log("Images: ", images);
+    mutate(images);
   };
 
   const removeImageHandler = (imageId: number) => {
