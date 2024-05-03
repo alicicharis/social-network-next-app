@@ -123,8 +123,10 @@ export interface IImage {
   preview: string;
 }
 
-export const mutationFunction = (images: IImage[]): any => {
-  // console.log("DATA: ", data);
+export const mutationFunction = (data: string): any => {
+  const parsedData: PostSchema = JSON.parse(data);
+
+  console.log("Parsed: ", parsedData);
 
   return true;
 };

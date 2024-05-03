@@ -3,10 +3,12 @@ import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import Dropzone from "react-dropzone";
+import { cn } from "@/lib/utils";
 
 import { Form, FormField, FormLabel, FormItem, FormControl } from "../ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,7 +29,7 @@ const AddPost = () => {
   const [images, setImages] = useState<IImage[]>([]);
 
   const { mutate } = useMutation({
-    mutationFn: (images: IImage[]) => mutationFunction(images),
+    mutationFn: (data: string) => mutationFunction(data),
   });
 
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -38,6 +40,12 @@ const AddPost = () => {
       })
     );
     setImages((prevImages) => [...prevImages, ...newImages]);
+
+    acceptedFiles.forEach((acceptedFile: any) =>
+      append({
+        file: acceptedFile,
+      })
+    );
   }, []);
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
@@ -45,14 +53,20 @@ const AddPost = () => {
     resolver: zodResolver(postSchema),
     defaultValues: {
       text: "",
+      images: [],
     },
   });
 
+  const { append } = useFieldArray({
+    name: "images",
+    control: form.control,
+  });
+
   const onSubmitHandler = (data: PostSchema) => {
-    console.log("Data: ", data);
+    console.log("Data: ", data.images);
 
     console.log("Images: ", images);
-    mutate(images);
+    mutate(JSON.stringify(data));
   };
 
   const removeImageHandler = (imageId: number) => {
@@ -99,7 +113,24 @@ const AddPost = () => {
                 </FormItem>
               )}
             />
-            <div {...getRootProps()}>
+            <FormField
+              control={form.control}
+              name="images"
+              render={() => (
+                <div {...getRootProps()}>
+                  <label htmlFor="images">
+                    <ImageIcon className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
+                  </label>
+                  <Input
+                    id="file-input"
+                    type="file"
+                    className="hidden"
+                    {...getInputProps}
+                  />
+                </div>
+              )}
+            />
+            {/* <div {...getRootProps()}>
               <label htmlFor="images">
                 <ImageIcon className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
               </label>
@@ -109,7 +140,7 @@ const AddPost = () => {
                 className="hidden"
                 {...getInputProps}
               />
-            </div>
+            </div> */}
           </form>
         </Form>
       </div>
