@@ -1,12 +1,14 @@
 "use server";
 // import { revalidatePath } from "next/cache";
-import { signUpFormSchema, PostSchema } from "./zod-schema";
+import { signUpFormSchema, PostSchema, postSchema } from "./zod-schema";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { todos, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrpyt from "bcrypt";
 import { S3, PutObjectCommand } from "@aws-sdk/client-s3";
 import { env } from "@/env";
+import { revalidatePath } from "next/cache";
+import { setTimeout } from "timers/promises";
 
 type Error = {
   username?: string;
@@ -129,4 +131,35 @@ export const mutationFunction = (data: string): any => {
   console.log("Parsed: ", parsedData);
 
   return true;
+};
+
+export const addPost = async (prevState: any, formData: FormData) => {
+  const data = Object.fromEntries(formData);
+  const parsed = postSchema.safeParse(data);
+
+  console.log("Parsed succes: ", parsed);
+  if (!parsed.success) {
+    const fields: Record<string, string> = {};
+    for (const key of Object.keys(data)) {
+      fields[key] = data[key].toString();
+    }
+
+    return {
+      message: "Invalid form data",
+      fields,
+      issues: parsed.error.issues.map((issue) => issue.message),
+    };
+  }
+
+  const text = formData.get("text") as string;
+
+  await db.insert(todos).values({
+    text: text,
+    userId: "0.26281650949986424",
+  });
+
+  console.log("Revalidating...");
+  revalidatePath("/profile/1");
+
+  return { message: "message" };
 };

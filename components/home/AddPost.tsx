@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Dropzone from "react-dropzone";
 import { cn } from "@/lib/utils";
+import { useFormState } from "react-dom";
 
 import { Form, FormField, FormLabel, FormItem, FormControl } from "../ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,6 +19,8 @@ import PreviewGallery from "./PreviewGallery";
 import { mutationFunction } from "@/lib/actions";
 import { Button } from "../ui/button";
 import { PostSchema, postSchema } from "@/lib/zod-schema";
+import { addPost } from "@/lib/actions";
+import SubmitButton from "../SubmitButton";
 
 export interface IImage {
   id: number;
@@ -26,6 +29,13 @@ export interface IImage {
 }
 
 const AddPost = () => {
+  const ref = useRef<HTMLFormElement>(null);
+
+  const [state, formAction] = useFormState(addPost, {
+    message: "",
+  });
+
+  ////
   const [images, setImages] = useState<IImage[]>([]);
 
   const { mutate } = useMutation({
@@ -95,7 +105,9 @@ const AddPost = () => {
         </Avatar>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmitHandler)}
+            ref={ref}
+            // onSubmit={form.handleSubmit(onSubmitHandler)}
+            action={formAction}
             className="flex items-center w-full gap-1 justify-between"
           >
             <FormField
@@ -141,6 +153,7 @@ const AddPost = () => {
                 {...getInputProps}
               />
             </div> */}
+            <SubmitButton>Add</SubmitButton>
           </form>
         </Form>
       </div>

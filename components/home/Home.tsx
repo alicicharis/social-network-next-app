@@ -9,6 +9,8 @@ import { IStory } from "./Stories";
 import Modal from "./Modal";
 import ChatList from "./ChatList";
 import FriendRequests from "./FriendRequests";
+import { db } from "@/db";
+import { todos } from "@/db/schema";
 
 const posts: IPost[] = [
   {
@@ -77,7 +79,25 @@ const stories: IStory[] = [
   },
 ];
 
-const Home = () => {
+const Home = async () => {
+  const onePost = await db.select().from(todos);
+
+  if (onePost[0]) {
+    posts.push({
+      id: Math.random(),
+      username: "Test Alicic",
+      timestamp: "04 May at 09:28",
+      text: onePost[0].text,
+      bookmarks: 10,
+      comments: 15,
+      likes: 150,
+      shares: 12,
+    });
+  }
+
+  const allPosts = posts.reverse();
+
+  console.log("Posts: ", posts);
   return (
     <div className="flex min-h-screen w-full flex-col bg-slate-200">
       <Navigation />
@@ -87,7 +107,7 @@ const Home = () => {
           <div className="grid auto-rows-max items-start gap-4 md:gap-6 lg:col-span-2">
             <Stories stories={stories} />
             <AddPost />
-            <Posts posts={posts} />
+            <Posts posts={allPosts} />
           </div>
           <div className="grid lg:col-span-2">
             <div className="h-screen w-full">

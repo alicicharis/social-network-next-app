@@ -44,14 +44,7 @@ const Posts = ({ posts }: { posts: IPost[] }) => {
           </div>
           <Separator />
           <div className="flex flex-col space-y-4">
-            {post.text && (
-              <p className="text-sm">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Aliquam dolorem assumenda delectus illum iste quibusdam iusto,
-                voluptates sunt ipsum quis perferendis, eligendi repudiandae.
-                Mollitia deleniti vitae laborum rerum explicabo placeat.
-              </p>
-            )}
+            {post.text && <p className="text-sm">{post.text}</p>}
             {post.images &&
               post?.images.length === 1 &&
               post?.images.map((image, i) => (
