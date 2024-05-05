@@ -57,17 +57,18 @@ const AddPost = () => {
       })
     );
   }, []);
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const form = useForm<PostSchema>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       text: "",
-      images: [],
+      images: "",
     },
   });
 
-  const { append } = useFieldArray({
+  const { append, fields } = useFieldArray({
     name: "images",
     control: form.control,
   });
@@ -79,15 +80,15 @@ const AddPost = () => {
     mutate(JSON.stringify(data));
   };
 
-  const removeImageHandler = (imageId: number) => {
-    setImages((prevImages) =>
-      prevImages.filter((image) => {
-        if (image.id === imageId) URL.revokeObjectURL(image.preview);
+  // const removeImageHandler = (imageId: number) => {
+  //   setImages((prevImages) =>
+  //     prevImages.filter((image) => {
+  //       if (image.id === imageId) URL.revokeObjectURL(image.preview);
 
-        return image.id !== imageId;
-      })
-    );
-  };
+  //       return image.id !== imageId;
+  //     })
+  //   );
+  // };
 
   useEffect(() => {
     return () =>
@@ -129,17 +130,21 @@ const AddPost = () => {
               control={form.control}
               name="images"
               render={() => (
-                <div {...getRootProps()}>
-                  <label htmlFor="images">
-                    <ImageIcon className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
-                  </label>
-                  <Input
-                    id="file-input"
-                    type="file"
-                    className="hidden"
-                    {...getInputProps}
-                  />
-                </div>
+                <FormItem>
+                  <FormControl>
+                    <div {...getRootProps()}>
+                      <label htmlFor="images">
+                        <ImageIcon className="text-slate-300 hover:text-black transition-all ease-in cursor-pointer" />
+                      </label>
+                      <Input
+                        id="file-input"
+                        type="file"
+                        className="hidden"
+                        {...getInputProps}
+                      />
+                    </div>
+                  </FormControl>
+                </FormItem>
               )}
             />
             {/* <div {...getRootProps()}>
@@ -175,7 +180,7 @@ const AddPost = () => {
               className="w-full h-auto rounded-lg"
             />
             <div
-              onClick={() => removeImageHandler(0)}
+              // onClick={() => removeImageHandler(0)}
               className="absolute inset-0 bg-black rounded-lg bg-opacity-100 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-70 flex items-center justify-center"
             >
               <p className="text-white text-lg">Click to remove</p>

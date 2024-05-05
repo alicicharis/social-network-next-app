@@ -97,7 +97,6 @@ const Home = async () => {
 
   const allPosts = posts.reverse();
 
-  console.log("Posts: ", posts);
   return (
     <div className="flex min-h-screen w-full flex-col bg-slate-200">
       <Navigation />

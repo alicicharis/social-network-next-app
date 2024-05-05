@@ -137,7 +137,7 @@ export const addPost = async (prevState: any, formData: FormData) => {
   const data = Object.fromEntries(formData);
   const parsed = postSchema.safeParse(data);
 
-  console.log("Parsed succes: ", parsed);
+  console.log("parsed success: ", parsed.success);
   if (!parsed.success) {
     const fields: Record<string, string> = {};
     for (const key of Object.keys(data)) {
@@ -151,6 +151,9 @@ export const addPost = async (prevState: any, formData: FormData) => {
     };
   }
 
+  const images = formData.get("images") as File;
+  console.log("images: ", images);
+  return { message: "message" };
   const text = formData.get("text") as string;
 
   await db.insert(todos).values({
